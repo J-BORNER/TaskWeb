@@ -1,36 +1,45 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+console.log('🔑 JWT_SECRET:', process.env.JWT_SECRET ? '✅ Configurado' : '❌ Faltante');
+
 // Generar token JWT
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '24h' });
+  return jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '24h' });
 };
 
 // Registrar nuevo usuario
 const register = async (req, res) => {
+  console.log('📝 Iniciando registro...');
+  console.log('📦 Body recibido:', req.body);
+  
   try {
     const { name, email, password } = req.body;
 
     // Validaciones básicas
     if (!name || !email || !password) {
+      console.log('❌ Campos faltantes');
       return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
-    }
-
+    console.log('🔍 Buscando usuario existente...');
+    
     // Verificar si el usuario ya existe
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
+      console.log('❌ Usuario ya existe');
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
+    console.log('👤 Creando nuevo usuario...');
+    
     // Crear nuevo usuario
     const newUser = await User.create({ name, email, password });
+    console.log('✅ Usuario creado:', newUser);
     
     // Generar token
     const token = generateToken(newUser.id);
+    console.log('🔑 Token generado');
 
     res.status(201).json({
       message: 'Usuario registrado exitosamente',
@@ -43,8 +52,13 @@ const register = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error en registro:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('💥 ERROR EN REGISTRO:', error);
+    console.error('💥 Stack:', error.stack);
+    
+    res.status(500).json({ 
+      error: 'Error interno del servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Contacta al administrador'
+    });
   }
 };
 
@@ -53,24 +67,20 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validaciones
     if (!email || !password) {
       return res.status(400).json({ error: 'Email y contraseña son requeridos' });
     }
 
-    // Buscar usuario
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Verificar contraseña
     const isValidPassword = await User.verifyPassword(password, user.password);
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Generar token
     const token = generateToken(user.id);
 
     res.json({
@@ -89,23 +99,7 @@ const login = async (req, res) => {
   }
 };
 
-// Obtener perfil del usuario actual
-const getProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId);
-    if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-
-    res.json({ user });
-  } catch (error) {
-    console.error('Error obteniendo perfil:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
 module.exports = {
   register,
-  login,
-  getProfile
+  login
 };

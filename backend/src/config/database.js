@@ -1,28 +1,22 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Configuración de la conexión a PostgreSQL
+console.log('🔍 DATABASE_URL:', process.env.DATABASE_URL ? '✅ Configurada' : '❌ No configurada');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // ✅ CONFIGURACIÓN SSL OBLIGATORIA PARA RENDER
-  ssl: {
-    rejectUnauthorized: false // Esto permite conexiones SSL
-  }
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Verificar conexión a la base de datos
+// Probar conexión inmediatamente
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('❌ Error conectando a la base de datos:', err.message);
+    console.error('❌ ERROR CONEXIÓN BD:', err.message);
+    console.error('❌ Código error:', err.code);
   } else {
-    console.log('✅ Conexión exitosa a PostgreSQL en Render');
+    console.log('✅ Conexión PostgreSQL exitosa');
     release();
   }
-});
-
-// Manejar errores de conexión
-pool.on('error', (err, client) => {
-  console.error('Error inesperado en la base de datos:', err);
 });
 
 module.exports = pool;
