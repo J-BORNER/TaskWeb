@@ -1,4 +1,5 @@
 const Task = require('../models/Task');
+const pool = require('../config/database');
 
 // Crear nueva tarea
 const createTask = async (req, res) => {
