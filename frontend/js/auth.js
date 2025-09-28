@@ -157,12 +157,12 @@ function logout() {
 }
 
 // Mostrar mensajes
-// Mostrar mensajes estilo burbuja mejorado
+// Mostrar mensajes estilo burbuja en parte inferior centrada
 function showMessage(message, type = 'info') {
-    // Remover mensajes existentes
+    // Remover mensajes existentes con efecto de salida
     const existingMessages = document.querySelectorAll('.message');
     existingMessages.forEach(msg => {
-        msg.style.animation = 'messageFadeOut 0.3s ease forwards';
+        msg.style.animation = 'superMessageOutBottom 0.3s ease forwards';
         setTimeout(() => {
             if (msg.parentNode) {
                 msg.parentNode.removeChild(msg);
@@ -172,56 +172,60 @@ function showMessage(message, type = 'info') {
 
     // Crear nuevo mensaje
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
-    messageDiv.textContent = message;
-
+    messageDiv.className = `message ${type} bounce`; // 🔥 Agregar clase bounce
+    
     // Agregar ícono según el tipo
-    const icon = type === 'success' ? '✅' :
-        type === 'error' ? '❌' :
-            'ℹ️';
-    messageDiv.innerHTML = `${icon} ${message}`;
+    const icon = type === 'success' ? '✅' : 
+                 type === 'error' ? '❌' : 
+                 '💡';
+    
+    messageDiv.innerHTML = `
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+            ${icon} ${message}
+        </span>
+    `;
 
-    // Agregar botón de cerrar para mensajes importantes
-    if (type === 'error') {
-        const closeBtn = document.createElement('span');
-        closeBtn.innerHTML = '×';
-        closeBtn.style.cssText = `
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        `;
-        closeBtn.onclick = () => {
-            messageDiv.style.animation = 'messageFadeOut 0.3s ease forwards';
-            setTimeout(() => {
-                if (messageDiv.parentNode) {
-                    messageDiv.parentNode.removeChild(messageDiv);
-                }
-            }, 300);
-        };
-        closeBtn.onmouseenter = () => closeBtn.style.opacity = '1';
-        closeBtn.onmouseleave = () => closeBtn.style.opacity = '0.7';
-        messageDiv.appendChild(closeBtn);
+    // Agregar botón de cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'close-btn';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = () => {
+        messageDiv.style.animation = 'superMessageOutBottom 0.3s ease forwards';
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.parentNode.removeChild(messageDiv);
+            }
+        }, 300);
+    };
+    messageDiv.appendChild(closeBtn);
+
+    // Agregar partículas decorativas (opcional)
+    if (type === 'success') {
+        const particles = document.createElement('div');
+        particles.className = 'particles';
+        for (let i = 0; i < 5; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            particles.appendChild(particle);
+        }
+        messageDiv.appendChild(particles);
     }
 
     document.body.appendChild(messageDiv);
 
-    // Auto-remover después de 5 segundos (solo si no es error importante)
-    if (type !== 'error') {
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.style.animation = 'messageFadeOut 0.5s ease forwards';
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.parentNode.removeChild(messageDiv);
-                    }
-                }, 500);
-            }
-        }, 5000);
-    }
+    // Auto-remover después de 5 segundos
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.style.animation = 'superMessageOutBottom 0.5s ease forwards';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 500);
+        }
+    }, 5000);
 }
 
 // Función para hacer requests autenticados
