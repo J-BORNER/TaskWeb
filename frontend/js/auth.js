@@ -75,6 +75,7 @@ async function register(event) {
     const password = document.getElementById('register-password').value;
     
     try {
+        showLoading('Creando cuenta...');
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
@@ -86,13 +87,12 @@ async function register(event) {
         const data = await response.json();
         
         if (response.ok) {
-            // Registro exitoso
+            showMessage('✅ Cuenta creada exitosamente!', 'success');
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            currentUser = data.user;
-            
-            showMessage('Registro exitoso! Redirigiendo...', 'success');
-            setTimeout(showDashboard, 2000);
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
         } else {
             showMessage(data.error || 'Error en el registro', 'error');
         }
@@ -100,6 +100,12 @@ async function register(event) {
         console.error('Error en registro:', error);
         showMessage('Error de conexión', 'error');
     }
+}
+
+// Agregar función de loading
+function showLoading(message) {
+    // Implementar spinner o mensaje de carga
+    console.log('Loading:', message);
 }
 
 // Función de login
