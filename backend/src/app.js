@@ -88,10 +88,10 @@ app.listen(PORT, () => {
 });
 
 // Inicializar base de datos en producción
-if (process.env.NODE_ENV === 'production') {
-  const initDatabase = require('../../database/init-db');
-  initDatabase().catch(console.error);
-}
+//if (process.env.NODE_ENV === 'production') {
+//  const initDatabase = require('../../database/init-db');
+//  initDatabase().catch(console.error);
+//}
 
 // Manejar cierre graceful del servidor
 process.on('SIGINT', () => {

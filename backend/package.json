@@ -16,7 +16,7 @@
     "postgresql",
     "tasks"
   ],
-  "author": "Tu Nombre",
+  "author": "ROCAEL MENDEZ",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
