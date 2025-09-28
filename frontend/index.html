@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Tasks - Gestión de Tareas</title>
+    <title>Student Tasks - Biblioteca Nocturna</title>
+
+    <!-- Nuevas dependencias para el estilo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Nuestro CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div id="app">
         <!-- Header -->
         <header class="header">
             <div class="container">
-                <h1>📚 Student Tasks</h1>
+                <h1>Student Tasks</h1>
                 <nav>
                     <div id="auth-buttons" class="auth-buttons">
                         <button onclick="showLogin()" class="btn btn-outline">Iniciar Sesión</button>
@@ -51,16 +61,19 @@
                     <div id="register-form" class="auth-form" style="display: none;">
                         <h2>Registrarse</h2>
                         <form onsubmit="register(event)">
+                            <!-- En el formulario de registro -->
                             <div class="form-group">
-                                <label for="register-name">Nombre:</label>
+                                <label for="register-name"><i class="fas fa-user"></i> Nombre:</label>
                                 <input type="text" id="register-name" required>
                             </div>
+
                             <div class="form-group">
-                                <label for="register-email">Email:</label>
+                                <label for="register-email"><i class="fas fa-envelope"></i> Email:</label>
                                 <input type="email" id="register-email" required>
                             </div>
+
                             <div class="form-group">
-                                <label for="register-password">Contraseña:</label>
+                                <label for="register-password"><i class="fas fa-lock"></i> Contraseña:</label>
                                 <input type="password" id="register-password" minlength="6" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -126,4 +139,5 @@
     <script src="js/tasks.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
