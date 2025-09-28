@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Tasks - Gestión de Tareas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <h1>📚 Student Tasks</h1>
+                <nav>
+                    <div id="auth-buttons" class="auth-buttons">
+                        <button onclick="showLogin()" class="btn btn-outline">Iniciar Sesión</button>
+                        <button onclick="showRegister()" class="btn btn-primary">Registrarse</button>
+                    </div>
+                    <div id="user-menu" class="user-menu" style="display: none;">
+                        <span id="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline">Cerrar Sesión</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="main">
+            <div class="container">
+                <!-- Sección de Autenticación -->
+                <section id="auth-section">
+                    <!-- Formulario de Login -->
+                    <div id="login-form" class="auth-form">
+                        <h2>Iniciar Sesión</h2>
+                        <form onsubmit="login(event)">
+                            <div class="form-group">
+                                <label for="login-email">Email:</label>
+                                <input type="email" id="login-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Contraseña:</label>
+                                <input type="password" id="login-password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ingresar</button>
+                            <p>¿No tienes cuenta? <a href="#" onclick="showRegister()">Regístrate aquí</a></p>
+                        </form>
+                    </div>
+
+                    <!-- Formulario de Registro -->
+                    <div id="register-form" class="auth-form" style="display: none;">
+                        <h2>Registrarse</h2>
+                        <form onsubmit="register(event)">
+                            <div class="form-group">
+                                <label for="register-name">Nombre:</label>
+                                <input type="text" id="register-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="register-email">Email:</label>
+                                <input type="email" id="register-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">Contraseña:</label>
+                                <input type="password" id="register-password" minlength="6" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrarse</button>
+                            <p>¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Inicia sesión aquí</a></p>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Dashboard de Tareas (oculto inicialmente) -->
+                <section id="dashboard" style="display: none;">
+                    <div class="dashboard-header">
+                        <h2>Mis Tareas</h2>
+                        <button onclick="showCreateTaskModal()" class="btn btn-primary">
+                            + Nueva Tarea
+                        </button>
+                    </div>
+
+                    <!-- Estadísticas -->
+                    <div class="stats">
+                        <div class="stat-card pending">
+                            <h3 id="pending-count">0</h3>
+                            <p>Pendientes</p>
+                        </div>
+                        <div class="stat-card in-progress">
+                            <h3 id="in-progress-count">0</h3>
+                            <p>En Progreso</p>
+                        </div>
+                        <div class="stat-card done">
+                            <h3 id="done-count">0</h3>
+                            <p>Completadas</p>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Tareas -->
+                    <div id="tasks-list" class="tasks-list">
+                        <!-- Las tareas se cargarán aquí dinámicamente -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Modal para crear tarea -->
+        <div id="create-task-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeCreateTaskModal()">&times;</span>
+                <h3>Crear Nueva Tarea</h3>
+                <form onsubmit="createTask(event)">
+                    <div class="form-group">
+                        <label for="task-title">Título:</label>
+                        <input type="text" id="task-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Descripción:</label>
+                        <textarea id="task-description" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crear Tarea</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

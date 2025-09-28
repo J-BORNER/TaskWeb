@@ -1,0 +1,32 @@
+# Configuración para despliegue en Render
+services:
+  # Backend API
+  - type: web
+    name: student-tasks-api
+    env: node
+    plan: free
+    region: ohio
+    buildCommand: npm run render-build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: student-tasks-db
+          property: connectionString
+
+  # Base de datos PostgreSQL
+  - type: pgsql
+    name: student-tasks-db
+    plan: free
+    region: ohio
+    databaseName: student_tasks_db
+    user: student_user
+
+databases:
+  - name: student-tasks-db
+    plan: free
+    region: ohio
