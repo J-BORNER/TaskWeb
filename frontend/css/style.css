@@ -412,84 +412,153 @@ body::before {
 }
 
 /* Mensajes */
+/* Mensajes emergentes - Estilo Burbuja Mejorado */
 .message {
-    padding: 1rem;
-    border-radius: 8px;
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 1.2rem 1.5rem;
+    border-radius: 15px;
     margin-bottom: 1rem;
     text-align: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 3000;
+    max-width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: none !important; /* 🔥 IMPORTANTE: Quitar el blur */
+    -webkit-backdrop-filter: none !important;
+    animation: messageSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+               messageFadeOut 0.5s ease 4.5s forwards;
+    transform-origin: center;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
+/* Animación de entrada espectacular */
+@keyframes messageSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(400px) scale(0.8);
+    }
+    70% {
+        transform: translateX(-10px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Animación de salida */
+@keyframes messageFadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(400px) scale(0.8);
+    }
+}
+
+/* Efecto de burbuja flotante */
+.message::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    background: inherit;
+    transform: rotate(45deg);
+    z-index: -1;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Efecto de brillo interno */
+.message::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+    );
+}
+
+/* Estilos específicos para éxito */
 .message.success {
-    background: rgba(46, 204, 113, 0.2);
-    color: #2ecc71;
-    border-color: rgba(46, 204, 113, 0.3);
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: 1px solid rgba(46, 204, 113, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+.message.success::before {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* Efecto de pulso para éxito */
+.message.success {
+    animation: messageSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+               messageFadeOut 0.5s ease 4.5s forwards,
+               successPulse 2s infinite;
+}
+
+@keyframes successPulse {
+    0%, 100% { box-shadow: 0 10px 30px rgba(46, 204, 113, 0.4); }
+    50% { box-shadow: 0 10px 40px rgba(46, 204, 113, 0.6), 0 0 20px rgba(46, 204, 113, 0.3); }
+}
+
+/* Estilos específicos para error */
 .message.error {
-    background: rgba(231, 76, 60, 0.2);
-    color: #e74c3c;
-    border-color: rgba(231, 76, 60, 0.3);
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: 1px solid rgba(231, 76, 60, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive */
+.message.error::before {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Efecto de vibración para error */
+.message.error {
+    animation: messageSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+               messageFadeOut 0.5s ease 4.5s forwards,
+               errorShake 0.5s ease;
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Estilos para mensajes informativos */
+.message.info {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: 1px solid rgba(52, 152, 219, 0.5);
+}
+
+.message.info::before {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+/* Responsive para móviles */
 @media (max-width: 768px) {
-    .header .container {
-        flex-direction: column;
-        gap: 1rem;
+    .message {
+        top: 80px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        margin: 0 10px;
     }
     
-    .dashboard-header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+    .message::before {
+        right: 50%;
+        transform: translateX(50%) rotate(45deg);
     }
-    
-    .task-item {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .task-actions {
-        justify-content: center;
-    }
-    
-    .stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .auth-form {
-        margin: 1rem;
-        padding: 2rem;
-    }
-}
-
-/* Animaciones adicionales */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.task-item {
-    animation: slideIn 0.3s ease-out;
-}
-
-/* Scrollbar personalizado */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(30, 30, 50, 0.4);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--button-hover-bg);
 }
